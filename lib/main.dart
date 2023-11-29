@@ -15,102 +15,77 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: const HomePage(title: 'Flutter Demo Home Page'),
+      home: const MagicBall(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key, title});
+class MagicBall extends StatefulWidget {
+  const MagicBall({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MagicBall> createState() => _MagicBallState();
 }
 
-class _HomePageState extends State<HomePage> {
-  String ball = "assets/ball1.png";
-  final List<int> ballNumber = List.generate(6, (index) => index + 1);
+class _MagicBallState extends State<MagicBall> {
+  final List<int> magicBall = List.generate(5, (index) => index + 1);
   List<String> ballAssets = [];
+  String ball = "assets/ball1.png";
   final Random rand = Random();
 
   @override
   void initState() {
     createBallAssets();
+    getRandomNumbers();
     super.initState();
   }
 
   void createBallAssets() {
-    for (var ball in ballNumber) {
+    for (var ball in magicBall) {
       ballAssets.add("assets/ball$ball.png");
     }
   }
 
-  void getRandomBall() {
-    int random = rand.nextInt(5);
-
+  void getRandomNumbers() {
+    int randBall = rand.nextInt(5);
     setState(() {
-      ball = ballAssets[random];
+      ball = ballAssets[randBall];
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.indigoAccent,
       body: Container(
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          color: Colors.purple,
-        ),
+        constraints: BoxConstraints.expand(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text(
-              "Ask me anything...",
-              style: TextStyle(
-                fontSize: 38,
-                color: Colors.white,
-              ),
-            ),
+            Text("Ask me anything",
+                style: TextStyle(
+                    fontSize: 32,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold)),
             Image.asset(
               ball,
-              width: 300,
+              width: MediaQuery.of(context).size.width * .8,
             ),
             ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                ),
-              ),
-              onPressed: () => getRandomBall(),
-              child: Text(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.blue,
+                  textStyle: TextStyle(fontSize: 38),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0))),
+              onPressed: () => getRandomNumbers(),
+              child: const Text(
                 "Button",
-                style: TextStyle(
-                  fontSize: 38,
-                  color: Colors.blue,
-                ),
               ),
-            )
+            ),
           ],
         ),
       ),
